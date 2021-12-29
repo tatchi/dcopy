@@ -25,8 +25,8 @@
   "scripts": {
     "build-async": "tsup-node src/index.ts --out-dir=dist --format cjs,esm",
     "build-sync": "tsup-node src/sync/* --out-dir=sync --format cjs,esm",
-    "build-fast": "pnpm build-async && pnpm build-sync",
-    "build": "rm -rf dist && rm -rf sync && pnpm run build-async -- --dts-resolve && pnpm run build-sync -- --dts-resolve",
+    "build-fast": "yarn build-async && yarn build-sync",
+    "build": "rm -rf dist && rm -rf sync && yarn run build-async -- --dts-resolve && yarn run build-sync -- --dts-resolve",
     "test": "uvu -r esbuild-register test"
   },
   "keywords": [],
