@@ -5,10 +5,10 @@ import { promisify } from "util";
 import { dirname, join } from "path";
 import { dcopy } from "../src/sync";
 import tmp from "tmp";
+import { premove } from "premove/sync";
 import {
   existsSync,
   writeFile,
-  rmdirSync,
   mkdirSync,
   writeFileSync,
   readdirSync,
@@ -36,7 +36,7 @@ test.before.each((context) => {
 });
 test.after.each(({ tmpDir }) => {
   try {
-    rmdirSync(tmpDir, { recursive: true });
+    premove(tmpDir);
   } catch (error) {
     console.error(error);
   }
