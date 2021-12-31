@@ -23,10 +23,7 @@
     }
   },
   "scripts": {
-    "build-async": "tsup-node src/index.ts --out-dir=dist --format cjs,esm",
-    "build-sync": "tsup-node src/sync/* --out-dir=sync --format cjs,esm",
-    "build-fast": "yarn build-async && yarn build-sync",
-    "build": "rm -rf dist && rm -rf sync && yarn run build-async -- --dts-resolve && yarn run build-sync -- --dts-resolve",
+    "build": "premove dist sync && node build.js",
     "test": "uvu -r esbuild-register test"
   },
   "keywords": [],
@@ -40,7 +37,6 @@
     "mk-dirs": "^3.0.0",
     "premove": "^4.0.0",
     "tmp": "^0.2.1",
-    "tsup": "^5.11.9",
     "typescript": "^4.5.4",
     "uvu": "^0.5.2"
   }
