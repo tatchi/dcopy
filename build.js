@@ -3,7 +3,7 @@ const ts = require("typescript");
 
 const files = [
   { entryPoint: "./src/index.ts", outdir: "dist" },
-  { entryPoint: "./src/sync/index.ts", outdir: "sync" },
+  { entryPoint: "./src/sync.ts", outdir: "sync" },
 ];
 
 files.forEach(({ entryPoint, outdir }) => {
