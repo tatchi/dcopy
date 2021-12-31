@@ -7,22 +7,23 @@ const files = [
 ];
 
 files.forEach(({ entryPoint, outdir }) => {
-  esbuild.build({
+  const commonOptions = {
     entryPoints: [entryPoint],
     bundle: false,
     platform: "node",
-    format: "esm",
-    bundle: false,
-    outExtension: { ".js": ".mjs" },
+    target: "node10",
     outdir,
+  };
+
+  esbuild.build({
+    ...commonOptions,
+    format: "esm",
+    outExtension: { ".js": ".mjs" },
   });
 
   esbuild.build({
-    entryPoints: [entryPoint],
-    bundle: false,
-    platform: "node",
+    ...commonOptions,
     format: "cjs",
-    outdir,
   });
 
   generateDtsForFile(entryPoint, outdir);
