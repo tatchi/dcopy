@@ -26,7 +26,8 @@
   },
   "scripts": {
     "build": "premove dist sync && node build.js",
-    "test": "uvu -r esbuild-register test"
+    "test": "uvu -r esbuild-register test",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",

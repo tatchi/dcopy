@@ -43,5 +43,23 @@ jobs:
       - name: Build
         run: yarn build
 
+      - name: (coverage) Install
+        if: matrix.node >= 16
+        run: yarn global add c8
+
       - name: Test
+        if: matrix.node < 16
         run: yarn test
+
+      - name: (coverage) Test
+        if: matrix.node >= 16
+        run: c8 --include=src yarn test
+
+      - name: Check Types
+        run: yarn typecheck
+
+      - name: (coverage) Report
+        if: matrix.node >= 16
+        run: |-
+          c8 report --reporter=text-lcov > coverage.lcov
+          bash <(curl -s https://codecov.io/bash)
