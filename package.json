@@ -27,6 +27,7 @@
   "scripts": {
     "build": "premove dist sync && node build.js",
     "test": "uvu -r esbuild-register test",
+    "test:coverage": "c8 --include=src yarn test",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [],
@@ -35,6 +36,7 @@
   "devDependencies": {
     "@types/node": "^17.0.5",
     "@types/tmp": "^0.2.3",
+    "c8": "^7.11.0",
     "esbuild": "^0.14.9",
     "esbuild-register": "^3.3.1",
     "gzip-size": "^6.0.0",
