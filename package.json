@@ -1,7 +1,16 @@
 {
   "name": "dcopy",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "A tiny utility to copy items recursively",
+  "keywords": [
+    "copy"
+  ],
+  "repository": "tatchi/dcopy",
+  "license": "MIT",
+  "author": {
+    "name": "Corentin Leruth",
+    "email": "corentin.leruth@gmail.com"
+  },
   "files": [
     "dist",
     "sync",
@@ -30,9 +39,6 @@
     "test:coverage": "c8 --include=src yarn test",
     "typecheck": "tsc --noEmit"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@types/node": "^17.0.5",
     "@types/tmp": "^0.2.3",
