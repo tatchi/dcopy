@@ -1,12 +1,12 @@
 const esbuild = require("esbuild");
 const ts = require("typescript");
 
-const files = [
+const entryPoints = [
   { entryPoint: "./src/index.ts", outdir: "dist" },
   { entryPoint: "./src/sync.ts", outdir: "sync" },
 ];
 
-files.forEach(({ entryPoint, outdir }) => {
+entryPoints.forEach(({ entryPoint, outdir }) => {
   const commonOptions = {
     entryPoints: [entryPoint],
     bundle: false,
@@ -25,9 +25,11 @@ files.forEach(({ entryPoint, outdir }) => {
     ...commonOptions,
     format: "cjs",
   });
-
-  generateDtsForFile(entryPoint, outdir);
 });
+
+entryPoints.forEach(({ entryPoint, outdir }) =>
+  generateDtsForFile(entryPoint, outdir)
+);
 
 // https://github.com/rsms/estrella/blob/master/examples/typedef-generation/build.js
 function generateDtsForFile(file, outDir) {
