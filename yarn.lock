@@ -344,7 +344,7 @@ istanbul-reports@^3.0.2:
     html-escaper "^2.0.0"
     istanbul-lib-report "^3.0.0"
 
-kleur@^4.0.3:
+kleur@^4.0.3, kleur@^4.1.4:
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-4.1.4.tgz#8c202987d7e577766d039a8cd461934c01cda04d"
   integrity sha512-8QADVssbrFjivHWQU7KkMgptGTl6WAcSdlbBPY4uNF+mWr6DGcKrvY2w4FQJoXch7+fKMjj0dRrL75vk3k23OA==
@@ -425,6 +425,11 @@ require-directory@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/require-directory/-/require-directory-2.1.1.tgz#8c64ad5fd30dab1c976e2344ffe7f792a6a6df42"
   integrity sha1-jGStX9MNqxyXbiNE/+f3kqam30I=
+
+rewrite-imports@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/rewrite-imports/-/rewrite-imports-3.0.0.tgz#4a5b921bbfa8030fd50c86d609b53432585a16bf"
+  integrity sha512-RClzg1cUfYLYkQadcrjgih8+CqJDKOP3OIWGkFE+e5n71085QnOwghzLPonEe1gG6iblCVJ8lHGFtd+n8wj3Hg==
 
 rimraf@^3.0.0:
   version "3.0.2"
