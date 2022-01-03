@@ -14,7 +14,7 @@ function save(file) {
 async function bundle(input, files) {
   const outfile = save(files.import);
 
-  esbuild.build({
+  await esbuild.build({
     bundle: false,
     platform: "node",
     target: "node10",

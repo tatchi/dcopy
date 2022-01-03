@@ -34,7 +34,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "premove dist sync && node build.js",
+    "build": "premove dist sync && node bin",
     "test": "uvu -r esbuild-register test",
     "test:coverage": "c8 --include=src yarn test",
     "types": "tsc",
