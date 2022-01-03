@@ -87,7 +87,7 @@ exports.table = function (files) {
     dim().bold().italic(lpad("(gzip)", g));
 
   arr.forEach((obj, idx) => {
-    if (idx && idx % 2 === 0) out += "\n";
+    if (idx && idx % 3 === 0) out += "\n";
     out +=
       "\n" +
       G1 +
@@ -102,28 +102,35 @@ exports.table = function (files) {
 };
 
 // https://github.com/rsms/estrella/blob/master/examples/typedef-generation/build.js
-exports.generateDtsForFile = function (file, outDir) {
-  const tsconfig = ts.readConfigFile("../tsconfig.json", ts.sys.readFile).config;
+exports.generateDtsFiles = function (file, outDir) {
+  const tsconfig = ts.readConfigFile("tsconfig.json", ts.sys.readFile);
+
+  const { fileNames, errors } = ts.parseJsonConfigFileContent(
+    tsconfig,
+    ts.sys,
+    "src"
+  );
+
+  if (errors.length) {
+    const formatHost = {
+      getCurrentDirectory: () => ts.sys.getCurrentDirectory(),
+      getNewLine: () => ts.sys.newLine,
+      getCanonicalFileName: ts.sys.useCaseSensitiveFileNames
+        ? (f) => f
+        : (f) => f.toLowerCase(),
+    };
+    console.error(ts.formatDiagnostics(errors, formatHost));
+    process.exitCode = 1;
+  }
 
   const compilerOptions = {
-    ...tsconfig.compilerOptions,
+    ...tsconfig.config.compilerOptions,
     moduleResolution: undefined,
-    declaration: true,
-    outDir,
+    noEmit: false,
+    emitDeclarationOnly: true,
   };
 
-  const files = Array.from(new Set(Array.isArray(file) ? file : [file]));
+  const program = ts.createProgram(fileNames, compilerOptions);
 
-  const program = ts.createProgram(files, compilerOptions);
-  const targetSourceFile = undefined;
-  const writeFile = undefined;
-  const cancellationToken = undefined;
-  const emitOnlyDtsFiles = true;
-
-  program.emit(
-    targetSourceFile,
-    writeFile,
-    cancellationToken,
-    emitOnlyDtsFiles
-  );
+  program.emit();
 };

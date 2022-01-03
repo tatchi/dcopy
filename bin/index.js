@@ -2,7 +2,7 @@ const esbuild = require("esbuild");
 const path = require("path");
 const { writeFileSync, existsSync, copyFileSync } = require("fs");
 const pkg = require("../package.json");
-const { toRequire, table } = require("./utils");
+const { toRequire, table, generateDtsFiles } = require("./utils");
 
 const FILELIST = [];
 
@@ -30,8 +30,10 @@ async function bundle(input, files) {
   if (!existsSync(dts))
     return console.warn('Missing "%s" file!', dts), (process.exitCode = 1);
 
-  copyFileSync(dts, path.normalize(files.types));
+  copyFileSync(dts, save(files.types));
 }
+
+generateDtsFiles();
 
 Promise.all([
   bundle("./src/index.ts", pkg.exports["."]),

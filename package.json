@@ -37,8 +37,7 @@
     "build": "premove dist sync && node bin",
     "test": "uvu -r esbuild-register test",
     "test:coverage": "c8 --include=src yarn test",
-    "types": "tsc",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/node": "^17.0.5",
