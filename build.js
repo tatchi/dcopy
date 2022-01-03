@@ -1,7 +1,8 @@
 const esbuild = require("esbuild");
 const ts = require("typescript");
 const path = require("path");
-const gzipSize = require("gzip-size");
+const { readFileSync } = require("fs");
+const { gzipSync } = require("zlib");
 
 const entryPoints = [
   { entryPoint: "./src/index.ts", outdir: "dist" },
@@ -22,6 +23,7 @@ const build = (entryPoint, options = {}) => {
       // logLevel: "info",
       legalComments: "none",
       outExtension: { ".js": outExt },
+      treeShaking: true,
       ...options,
     })
     .then(() => {
@@ -32,6 +34,21 @@ const build = (entryPoint, options = {}) => {
       return outfile;
     });
 };
+
+// https://github.com/lukeed/worktop/blob/e3a44ba8cd34d7fa6849f98d4fb8dae37afdb404/bin/format.js#L14
+function toSize(val = 0) {
+  const UNITS = ["B ", "kB", "MB", "GB"];
+  if (val < 1e3) return `${val} ${UNITS[0]}`;
+  let exp = Math.min(Math.floor(Math.log10(val) / 3), UNITS.length - 1) || 1;
+  let out = (val / Math.pow(1e3, exp)).toPrecision(3);
+  let idx = out.indexOf(".");
+  if (idx === -1) {
+    out += ".00";
+  } else if (out.length - idx - 1 !== 2) {
+    out = (out + "00").substring(0, idx + 3); // 2 + 1 for 0-based
+  }
+  return out + " " + UNITS[exp];
+}
 
 Promise.all([
   build("./src/index.ts", { outdir: "dist", format: "esm" }),
@@ -45,11 +62,11 @@ Promise.all([
   outfiles.forEach((file) => {
     maxLength = Math.max(maxLength, file.length);
   });
-  return outfiles.map((outfile) =>
-    gzipSize.file(outfile).then((size) => {
-      console.log(`${rpad(outfile, maxLength)}    ${size} B`);
-    })
-  );
+  return outfiles.map((outfile) => {
+    const data = readFileSync(outfile);
+    const size = toSize(gzipSync(data).byteLength);
+    console.log(`${rpad(outfile, maxLength)}    ${size}`);
+  });
 });
 
 entryPoints.forEach(({ entryPoint, outdir }) =>
