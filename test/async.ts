@@ -42,7 +42,7 @@ test.after.each(({ tmpDir }) => {
   }
 });
 
-async function touch(str: string, cwd?: string) {
+async function touch(str: string, cwd: string = ".") {
   const dir = dirname(str);
   const joined = join(cwd || ".", dir);
   await mkdir(joined, { cwd }).then(() =>
