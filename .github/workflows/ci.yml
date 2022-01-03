@@ -58,7 +58,7 @@ jobs:
         run: yarn typecheck
 
       - name: (coverage) Report
-        if: matrix.node-version >= 16
+        if: matrix.node-version >= 16 && matrix.os == 'ubuntu-latest'
         run: |
           c8 report --reporter=text-lcov > coverage.lcov
           bash <(curl -s https://codecov.io/bash)
