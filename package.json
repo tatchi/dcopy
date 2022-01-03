@@ -36,6 +36,7 @@
     "@types/tmp": "^0.2.3",
     "esbuild": "^0.14.9",
     "esbuild-register": "^3.3.1",
+    "gzip-size": "^6.0.0",
     "mk-dirs": "^3.0.0",
     "premove": "^4.0.0",
     "tmp": "^0.2.1",

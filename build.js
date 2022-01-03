@@ -1,30 +1,55 @@
 const esbuild = require("esbuild");
 const ts = require("typescript");
+const path = require("path");
+const gzipSize = require("gzip-size");
 
 const entryPoints = [
   { entryPoint: "./src/index.ts", outdir: "dist" },
   { entryPoint: "./src/sync.ts", outdir: "sync" },
 ];
 
-entryPoints.forEach(({ entryPoint, outdir }) => {
-  const commonOptions = {
-    entryPoints: [entryPoint],
-    bundle: false,
-    platform: "node",
-    target: "node10",
-    outdir,
-  };
+const build = (entryPoint, options = {}) => {
+  const outExt = options.format === "esm" ? ".mjs" : ".js";
 
-  esbuild.build({
-    ...commonOptions,
-    format: "esm",
-    outExtension: { ".js": ".mjs" },
-  });
+  return esbuild
+    .build({
+      entryPoints: [entryPoint],
+      bundle: false,
+      platform: "node",
+      target: "node10",
+      minify: false,
+      external: [],
+      // logLevel: "info",
+      legalComments: "none",
+      outExtension: { ".js": outExt },
+      ...options,
+    })
+    .then(() => {
+      const outfile = `${path.join(
+        options.outdir,
+        path.basename(entryPoint, ".ts")
+      )}${outExt}`;
+      return outfile;
+    });
+};
 
-  esbuild.build({
-    ...commonOptions,
-    format: "cjs",
+Promise.all([
+  build("./src/index.ts", { outdir: "dist", format: "esm" }),
+  build("./src/index.ts", { outdir: "dist", format: "cjs" }),
+  build("./src/sync.ts", { outdir: "sync", format: "esm" }),
+  build("./src/sync.ts", { outdir: "sync", format: "cjs" }),
+]).then((outfiles) => {
+  const _ = " ";
+  const rpad = (str, max) => str + _.repeat(max - str.length);
+  let maxLength = 0;
+  outfiles.forEach((file) => {
+    maxLength = Math.max(maxLength, file.length);
   });
+  return outfiles.map((outfile) =>
+    gzipSize.file(outfile).then((size) => {
+      console.log(`${rpad(outfile, maxLength)}    ${size} B`);
+    })
+  );
 });
 
 entryPoints.forEach(({ entryPoint, outdir }) =>
@@ -56,25 +81,4 @@ function generateDtsForFile(file, outDir) {
     cancellationToken,
     emitOnlyDtsFiles
   );
-
-  // const { fileNames, errors } = ts.parseJsonConfigFileContent(
-  //   config,
-  //   ts.sys,
-  //   "src"
-  // );
-
-  // console.log(fileNames)
-
-  // if (errors.length) {
-  //   const formatHost = {
-  //     getCurrentDirectory: () => ts.sys.getCurrentDirectory(),
-  //     getNewLine: () => ts.sys.newLine,
-  //     getCanonicalFileName: ts.sys.useCaseSensitiveFileNames
-  //       ? (f) => f
-  //       : (f) => f.toLowerCase(),
-  //   };
-  //   console.error(ts.formatDiagnostics(errors, formatHost));
-  // }
-
-  // const host = ts.createCompilerHost(config);
 }
