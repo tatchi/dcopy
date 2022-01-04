@@ -38,9 +38,7 @@ jobs:
       - name: Install kanpai
         run: yarn global add kanpai
 
-      - run: |
-          yarn run build
-          kp release
+      - run: kp release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
