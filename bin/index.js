@@ -1,3 +1,4 @@
+// @ts-check
 const esbuild = require("esbuild");
 const path = require("path");
 const { writeFileSync, existsSync, copyFileSync } = require("fs");
@@ -16,13 +17,14 @@ const FILELIST = [];
  */
 function save(file) {
   file = path.normalize(file);
-  return FILELIST.push(file) && file;
+  FILELIST.push(file);
+  return file;
 }
 
 /**
  *
  * @param {string} input
- * @param {Record<'import'|'require', string>} files
+ * @param {Record<'import'|'require'|'types', string>} files
  */
 async function bundle(input, files) {
   const outfile = save(files.import);
@@ -40,8 +42,11 @@ async function bundle(input, files) {
   writeFileSync(save(files.require), toRequire(outfile));
 
   let dts = input.replace(/\.[mc]?[tj]s$/, ".d.ts");
-  if (!existsSync(dts))
-    return console.warn('Missing "%s" file!', dts), (process.exitCode = 1);
+  if (!existsSync(dts)) {
+    console.warn('Missing "%s" file!', dts);
+    process.exitCode = 1;
+    return;
+  }
 
   copyFileSync(dts, save(files.types));
 }

@@ -1,3 +1,4 @@
+// @ts-check
 const { readFileSync } = require("fs");
 const { rewrite: rimports } = require("rewrite-imports");
 const { gzipSync } = require("zlib");
@@ -25,7 +26,7 @@ function toSize(val) {
 
 /**
  * https://github.com/lukeed/worktop/blob/e3a44ba8cd34d7fa6849f98d4fb8dae37afdb404/bin/format.js#L77
- * @param {string} input 
+ * @param {string} input
  * @returns {string}
  */
 exports.toRequire = function (input) {
@@ -44,6 +45,7 @@ exports.toRequire = function (input) {
     .replace(
       /(^|\s|\n|;?)export \{([\s\S]*?)\};?([\n\s]*?|$)/g,
       (_, x, names) => {
+        // @ts-ignore
         names.split(",").forEach((name) => {
           let [src, dest] = name.trim().split(/\s+as\s+/);
           footer += `\nexports.${dest || src} = ${src};`;
@@ -55,13 +57,25 @@ exports.toRequire = function (input) {
 };
 
 const _ = " ";
+/**
+ *
+ * @param {string} str
+ * @param {number} max
+ * @returns
+ */
 const lpad = (str, max) => _.repeat(max - str.length) + str;
+/**
+ *
+ * @param {string} str
+ * @param {number} max
+ * @returns
+ */
 const rpad = (str, max) => str + _.repeat(max - str.length);
 const th = dim().bold().italic().underline;
 
 /**
  * https://github.com/lukeed/worktop/blob/e3a44ba8cd34d7fa6849f98d4fb8dae37afdb404/bin/format.js#L40
- * @param {string[]} files 
+ * @param {string[]} files
  */
 exports.table = function (files) {
   let f = 8,
@@ -129,8 +143,8 @@ exports.generateDtsFiles = function () {
       getCurrentDirectory: () => ts.sys.getCurrentDirectory(),
       getNewLine: () => ts.sys.newLine,
       getCanonicalFileName: ts.sys.useCaseSensitiveFileNames
-        ? (f) => f
-        : (f) => f.toLowerCase(),
+        ? (/** @type {string} */ f) => f
+        : (/** @type {string} */ f) => f.toLowerCase(),
     };
     console.error(ts.formatDiagnostics(errors, formatHost));
     process.exitCode = 1;
