@@ -4,8 +4,12 @@ const { gzipSync } = require("zlib");
 const ts = require("typescript");
 const { cyan, dim, gray, blue } = require("kleur");
 
-// https://github.com/lukeed/worktop/blob/e3a44ba8cd34d7fa6849f98d4fb8dae37afdb404/bin/format.js#L14
-function toSize(val = 0) {
+/**
+ * https://github.com/lukeed/worktop/blob/e3a44ba8cd34d7fa6849f98d4fb8dae37afdb404/bin/format.js#L14
+ * @param {number} val
+ * @returns {string}
+ */
+function toSize(val) {
   const UNITS = ["B ", "kB", "MB", "GB"];
   if (val < 1e3) return `${val} ${UNITS[0]}`;
   let exp = Math.min(Math.floor(Math.log10(val) / 3), UNITS.length - 1) || 1;
@@ -19,6 +23,11 @@ function toSize(val = 0) {
   return out + " " + UNITS[exp];
 }
 
+/**
+ * https://github.com/lukeed/worktop/blob/e3a44ba8cd34d7fa6849f98d4fb8dae37afdb404/bin/format.js#L77
+ * @param {string} input 
+ * @returns {string}
+ */
 exports.toRequire = function (input) {
   let footer = "";
   let content = readFileSync(input, "utf8");
@@ -50,6 +59,10 @@ const lpad = (str, max) => _.repeat(max - str.length) + str;
 const rpad = (str, max) => str + _.repeat(max - str.length);
 const th = dim().bold().italic().underline;
 
+/**
+ * https://github.com/lukeed/worktop/blob/e3a44ba8cd34d7fa6849f98d4fb8dae37afdb404/bin/format.js#L40
+ * @param {string[]} files 
+ */
 exports.table = function (files) {
   let f = 8,
     s = 8,
@@ -102,7 +115,7 @@ exports.table = function (files) {
 };
 
 // https://github.com/rsms/estrella/blob/master/examples/typedef-generation/build.js
-exports.generateDtsFiles = function (file, outDir) {
+exports.generateDtsFiles = function () {
   const tsconfig = ts.readConfigFile("tsconfig.json", ts.sys.readFile);
 
   const { fileNames, errors } = ts.parseJsonConfigFileContent(

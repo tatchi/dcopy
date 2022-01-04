@@ -4,13 +4,26 @@ const { writeFileSync, existsSync, copyFileSync } = require("fs");
 const pkg = require("../package.json");
 const { toRequire, table, generateDtsFiles } = require("./utils");
 
+/**
+ * @type {string[]}
+ */
 const FILELIST = [];
 
+/**
+ *
+ * @param {string} file
+ * @returns {string}
+ */
 function save(file) {
   file = path.normalize(file);
   return FILELIST.push(file) && file;
 }
 
+/**
+ *
+ * @param {string} input
+ * @param {Record<'import'|'require', string>} files
+ */
 async function bundle(input, files) {
   const outfile = save(files.import);
 
@@ -38,6 +51,4 @@ generateDtsFiles();
 Promise.all([
   bundle("./src/index.ts", pkg.exports["."]),
   bundle("./src/sync.ts", pkg.exports["./sync"]),
-]).then(() => {
-  table(FILELIST);
-});
+]).then(() => table(FILELIST));
