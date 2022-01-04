@@ -1,9 +1,10 @@
 {
-  "name": "dcopy",
+  "name": "@tatchi/dcopy",
   "version": "0.1.0",
   "description": "A tiny utility to copy items recursively",
   "keywords": [
-    "copy"
+    "copy",
+    "cp"
   ],
   "repository": "tatchi/dcopy",
   "license": "MIT",
