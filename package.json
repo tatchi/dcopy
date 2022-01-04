@@ -6,6 +6,10 @@
     "copy",
     "cp"
   ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "repository": "tatchi/dcopy",
   "license": "MIT",
   "author": {
