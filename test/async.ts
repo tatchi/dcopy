@@ -3,7 +3,7 @@ import { mkdir } from "mk-dirs";
 import * as assert from "uvu/assert";
 import { promisify } from "util";
 import { dirname, join } from "path";
-import { dcopy } from "../src";
+import { dcopy } from "../dist";
 import tmp from "tmp";
 import { premove } from "premove/sync";
 import {
