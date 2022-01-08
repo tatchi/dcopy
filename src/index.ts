@@ -8,17 +8,14 @@ const copyFile = promisify(fs.copyFile);
 const stat = promisify(fs.stat);
 
 async function walker(src: string, dest: string) {
-  let stats = await stat(src);
-  if (stats.isDirectory()) {
+  if ((await stat(src)).isDirectory()) {
     try {
       await mkdir(dest);
     } catch (
       // @ts-ignore
       error: NodeJS.ErrnoException
     ) {
-      if (error.code !== "EEXIST") {
-        throw error;
-      }
+      if (error.code !== "EEXIST") throw error;
     }
     const files = await readdir(src);
     await Promise.all(

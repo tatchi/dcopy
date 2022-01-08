@@ -4,16 +4,7 @@ import * as path from "path";
 function walker(src: string, dest: string) {
   let stats = fs.statSync(src);
   if (stats.isDirectory()) {
-    try {
-      fs.mkdirSync(dest);
-    } catch (
-      // @ts-ignore
-      error: NodeJS.ErrnoException
-    ) {
-      if (error.code !== "EEXIST") {
-        throw error;
-      }
-    }
+    if (!fs.existsSync(dest)) fs.mkdirSync(dest);
     fs.readdirSync(src).forEach((name) => {
       walker(path.join(src, name), path.join(dest, name));
     });
