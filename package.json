@@ -1,6 +1,6 @@
 {
   "name": "@tatchi/dcopy",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A tiny utility to copy items recursively",
   "keywords": [
     "copy",
