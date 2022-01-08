@@ -13,6 +13,7 @@ import {
   writeFileSync,
   readdirSync,
   statSync,
+  readFileSync,
 } from "fs";
 
 const write = promisify(writeFile);
@@ -126,16 +127,20 @@ test("copy single directory with files", async ({ tmpDir }) => {
 test("copy directories recursively", async ({ tmpDir }) => {
   await touch("foo/bar/baz/bat/bat.txt", tmpDir);
   await touch("foo/bar/baz/bat/bat2.txt", tmpDir);
+  await touch("foo/bar/boum/boum.txt", tmpDir);
   await touch("foo/bar/baz/baz.txt", tmpDir);
 
   const bazDir = join(tmpDir, "foo/bar/baz");
   const batDir = join(tmpDir, "foo/bar/baz/bat");
+  const boumDir = join(tmpDir, "foo/bar/boum");
 
   exists(bazDir, true, "~> baz dir exists");
   exists(batDir, true, "~> bat dir exists");
+  exists(boumDir, true, "~> boum dir exists");
   exists(join(bazDir, "baz.txt"), true, "~> baz.txt exists");
   exists(join(batDir, "bat.txt"), true, "~> bat.txt exists");
   exists(join(batDir, "bat2.txt"), true, "~> bat2.txt exists");
+  exists(join(boumDir, "boum.txt"), true, "~> boum.txt exists");
 
   const dst = join(tmpDir, "foo_copy");
 
@@ -162,6 +167,44 @@ test("copy directories recursively", async ({ tmpDir }) => {
   exists(join(copiedBazDir, "baz.txt"), true, "~> copied baz.txt exists");
   exists(join(copiedBatDir, "bat.txt"), true, "~> copied bat.txt exists");
   exists(join(copiedBatDir, "bat2.txt"), true, "~> copied bat2.txt exists");
+});
+test("overwrites existing content", async ({ tmpDir }) => {
+  await touch("foo/bar/baz/bat/bat.txt", tmpDir);
+  await touch("foo/bar/boum/boum.txt", tmpDir);
+  await touch("foo/bar/baz/baz.txt", tmpDir);
+
+  const batDir = join(tmpDir, "foo/bar/baz/bat");
+  const boumDir = join(tmpDir, "foo/bar/boum");
+
+  writeFileSync(join(batDir, "bat.txt"), "bat original content");
+  writeFileSync(join(boumDir, "boum.txt"), "boum original content");
+
+  // Copy
+  await touch("foo_copy/bar/baz/bat/bat.txt", tmpDir);
+
+  const batCopyDir = join(tmpDir, "foo_copy/bar/baz/bat");
+
+  writeFileSync(join(batCopyDir, "bat.txt"), "bat new content");
+
+  const dst = join(tmpDir, "foo");
+
+  dcopy(join(tmpDir, "foo_copy"), dst);
+
+  exists(batDir, true, "~> bat dir exists");
+
+  // bat.txt content is replaced
+  assert.is(
+    readFileSync(join(batDir, "bat.txt"), { encoding: "utf-8" }),
+    "bat new content",
+    "~> existing file content is replaced"
+  );
+
+  exists(join(boumDir, "boum.txt"), true, "~> boum.txt exists");
+  assert.is(
+    readFileSync(join(boumDir, "boum.txt"), { encoding: "utf-8" }),
+    "boum original content",
+    "~> existing file content is kept"
+  );
 });
 
 test.run();
