@@ -127,8 +127,8 @@ test("copy single directory with files", async ({ tmpDir }) => {
 test("copy directories recursively", async ({ tmpDir }) => {
   await touch("foo/bar/baz/bat/bat.txt", tmpDir);
   await touch("foo/bar/baz/bat/bat2.txt", tmpDir);
-  await touch("foo/bar/boum/boum.txt", tmpDir);
   await touch("foo/bar/baz/baz.txt", tmpDir);
+  await touch("foo/bar/boum/boum.txt", tmpDir);
 
   const bazDir = join(tmpDir, "foo/bar/baz");
   const batDir = join(tmpDir, "foo/bar/baz/bat");
