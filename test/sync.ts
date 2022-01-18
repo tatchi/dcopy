@@ -83,6 +83,12 @@ test("copy single file", ({ tmpDir }) => {
   dcopy(src, dst);
 
   exists(dst, true, "~> copied file");
+  assert.is(statSync(dst).isDirectory(), false, "~> copied file is a file");
+  assert.is(
+    readFileSync(dst, { encoding: "utf-8" }),
+    "hello",
+    "~> content is copied"
+  );
 });
 
 test("copy single empty directory", ({ tmpDir }) => {
