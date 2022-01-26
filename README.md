@@ -18,13 +18,13 @@ There are two "versions" of `dcopy` available:
 
 #### "async"
 
-> **Node.js:** >= 8.x<br> > **Size (gzip):** 340 bytes<br> > **Availability:** [CommonJS](https://unpkg.com/@tatchi/dcopy/dist/index.js), [ES Module](https://unpkg.com/@tatchi/dcopy/dist/index.mjs)
+> **Size (gzip):** 340 bytes<br> > **Availability:** [CommonJS](https://unpkg.com/@tatchi/dcopy/dist/index.js), [ES Module](https://unpkg.com/@tatchi/dcopy/dist/index.mjs)
 
 This is the primary/default mode. It makes use of `async`/`await` and [`util.promisify`](https://nodejs.org/api/util.html#util_util_promisify_original).
 
 #### "sync"
 
-> **Node.js:** >= 6.x<br> > **Size (gzip):** 241 bytes<br> > **Availability:** [CommonJS](https://unpkg.com/@tatchi/dcopy/sync/index.js), [ES Module](https://unpkg.com/@tatchi/dcopy/sync/index.mjs)
+> **Size (gzip):** 241 bytes<br> > **Availability:** [CommonJS](https://unpkg.com/@tatchi/dcopy/sync/index.js), [ES Module](https://unpkg.com/@tatchi/dcopy/sync/index.mjs)
 
 This is the opt-in mode, ideal for scenarios where `async` usage cannot be supported.<br>In order to use it, simply make the following changes:
 
