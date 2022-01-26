@@ -83,4 +83,4 @@ The filepath to copy to.
 
 ## Acknowledgments
 
-This library is heavily inspired from and reuses lots of [lukeed](https://github.com/lukeed)'s work.
+This library is heavily inspired from and reuses lots of [lukeed](https://github.com/lukeed)'s work. Thanks for his amazing work 😍
